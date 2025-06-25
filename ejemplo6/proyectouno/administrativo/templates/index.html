@@ -33,48 +33,36 @@
 </table>
 
 
-<h3>Lista de Estudianes</h3>
-<hr>
-[<a href="{% url 'crear_matricula' %}">nuevo</a>]
+<h3>Lista de Estudiantes</h3>
 <hr>
 <table border="1px">
   <tr>
-    <th><b>Estudiante</b></th>
+    <th><b>Nombre</b></th>
     <th><b>Apellido</b></th>
     <th><b>Tipo</b></th>
     <th><b>Edad</b></th>
     <th><b>Matriculas</b></th>
   </tr>
-  {% for e in matriculas %}
+  {% for estudiante in estudiantes %}
   <tr>
+    <td>{{ estudiante.nombre }}</td>
+    <td>{{ estudiante.apellido }}</td>
+    <td>{{ estudiante.tipo_estudiante }}</td>
+    <td>{{ estudiante.edad }}</td>
     <td>
-      {{e.estudiante.nombre}}
-      [<a href="{% url 'detalle_estudiante' e.estudiante.id %}">+</a>]
-    </td>
-    <td>
-      {{e.estudiante.apellido}}
-    </td>
-    <td>
-      {{e.estudiante.tipo_estudiante}}
-    </td>
-    <td>
-      {{e.estudiante.edad}}
-    <td>
-      <ul>
-        {% for matricula in e.estudiante.lasmatriculas.all %}
-  <li>
-    {{ matricula.modulo.get_nombre_display }} - 
-    ${{ matricula.loscostos.first.costo|default:"0.00" }}
-  </li>
-{% endfor %}
-
-
-      </ul>
-    </td>
-    <td>
-      [<a href="{% url 'detalle_matricula' e.id %}">ver</a>]
-      [<a href="{% url 'editar_matricula' e.id %}">editar</a>]
+      {% for matricula in estudiante.lasmatriculas.all %}
+        Módulo: {{ matricula.modulo.nombre }}<br>
+        {% for costo in matricula.loscostos.all %}
+          Costo: ${{ costo.costo }}<br>
+        {% endfor %}
+        <br>
+      {% empty %}
+        No tiene matrículas<br>
+      {% endfor %}
+      <strong>Costo Total: ${{ estudiante.total_general }}</strong>
     </td>
   </tr>
   {% endfor %}
 </table>
+
+

@@ -11,14 +11,25 @@ from administrativo.forms import MatriculaForm, MatriculaEditForm
 # el nombre de la vista es index.
 
 def index(request):
-    """
-    """
     matriculas = Matricula.objects.all()
+    estudiantes = Estudiante.objects.all()
 
-    titulo = "Listado de matriculas"
-    informacion_template = {'matriculas': matriculas,
-    'numero_matriculas': len(matriculas), 'mititulo': titulo}
-    return render(request, 'index.html', informacion_template)
+    # Agregar el total a cada estudiante
+    for est in estudiantes:
+        total = 0
+        for m in est.lasmatriculas.all():
+            for c in m.loscostos.all():
+                total += c.costo
+        est.total_general = total
+
+    contexto = {
+        'matriculas': matriculas,
+        'estudiantes': estudiantes,
+        'numero_matriculas': len(matriculas),
+        'mititulo': "Listado de Matriculas y Estudiantes",
+    }
+    return render(request, 'index.html', contexto)
+
 
 
 def detalle_matricula(request, id):
@@ -86,5 +97,14 @@ def costos_matricula(request, id):
 
 def listado_estudiantes_con_matriculas(request):
     estudiantes = Estudiante.objects.all()
-    contexto = {'estudiantes': estudiantes}
-    return render(request, 'index.html', contexto)
+
+    for est in estudiantes:
+        total = 0
+        for m in est.lasmatriculas.all():
+            for c in m.loscostos.all():
+                total += c.costo
+        est.total_general = total  # este atributo lo usas en el template
+
+    return render(request, 'index.html', {'estudiantes': estudiantes})
+
+
