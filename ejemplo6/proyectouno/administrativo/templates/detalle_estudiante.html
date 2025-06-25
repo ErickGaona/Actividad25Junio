@@ -1,0 +1,33 @@
+<h2>Detalle estudiante</h2>
+
+<b>Nombre:</b> {{e.nombre}}
+</br>
+<b>Apellido:</b> {{e.apellido}}
+</br>
+<b>Edad:</b> {{e.edad}}
+</br>
+<b>Cédula:</b> {{e.cedula}}
+</br>
+<hr>
+<table border="1px">
+  <tr>
+    <th><b>Módulo</b></th>
+    <th><b>comentario</b></th>
+
+  </tr>
+  {% for m in e.obtener_matriculas %}
+  <tr>
+    <td>
+      {{m.modulo.nombre}}
+    </td>
+    <td>
+      {{m.comentario}}
+    </td>
+
+  </tr>
+  {% endfor %}
+
+</table>
+
+</br>
+[<a href="{% url 'index' %}">inicio</a>]

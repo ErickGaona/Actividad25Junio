@@ -1,0 +1,28 @@
+
+
+<h2>Estudiantes y sus Matrículas</h2>
+{% for estudiante in estudiantes %}
+    <div style="border:1px solid #ccc; margin-bottom:20px; padding:10px;">
+        <strong>Nombre:</strong> {{ estudiante.nombre }}<br>
+        <strong>Apellido:</strong> {{ estudiante.apellido }}<br>
+        <strong>Tipo:</strong> {{ estudiante.tipo_estudiante }}<br>
+        <strong>Edad:</strong> {{ estudiante.edad }}<br>
+        <strong>Matrículas:</strong>
+        <ul>
+            {% for matricula in estudiante.lasmatriculas.all %}
+                <li>
+                    {{ matricula.modulo }} - {{ matricula.comentario }}
+                    <ul>
+                        {% for costo in matricula.loscostos.all %}
+                            <li>Costo: ${{ costo.costo }}</li>
+                        {% empty %}
+                            <li>Sin costo registrado</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% empty %}
+                <li>Sin matrículas</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endfor %}
